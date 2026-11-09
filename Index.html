@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background: #F1F5F9;
+            color: #172554;
+        }
+        /* HEADER */
+        
+        header {
+            background: #172554;
+            color: white;
+            padding: 22px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        header h2 {
+            font-size: 21px;
+        }
+        
+        .admin {
+            background: #93C5FD;
+            color: #172554;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        /* MAIN CONTENT */
+        
+        .container {
+            padding: 25px;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+            font-size: 25px;
+        }
+        /* DASHBOARD CARDS */
+        
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+        
+        .card {
+            background: white;
+            padding: 25px;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .card p {
+            color: #64748B;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .card h2 {
+            font-size: 26px;
+        }
+        
+        .blue {
+            color: #2563EB;
+        }
+        
+        .green {
+            color: #16A34A;
+        }
+        
+        .red {
+            color: #DC2626;
+        }
+        /* FORM */
+        
+        .form-section {
+            background: white;
+            padding: 22px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+        
+        .form-section h3 {
+            margin-bottom: 18px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #CBD5E1;
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        input:focus {
+            border-color: #2563EB;
+        }
+        /* BUTTONS */
+        
+        button {
+            border: none;
+            padding: 11px 17px;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        button:hover {
+            opacity: 0.85;
+        }
+        
+        .add-btn {
+            background: #16A34A;
+            margin-top: 20px;
+        }
+        
+        .search-btn {
+            background: #2563EB;
+        }
+        
+        .refresh-btn {
+            background: #475569;
+        }
+        
+        .delete-btn {
+            background: #DC2626;
+        }
+        /* EMPLOYEE RECORDS */
+        
+        .records {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .records-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .search-box input {
+            width: 220px;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+        
+        th {
+            background: #172554;
+            color: white;
+            padding: 14px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #E2E8F0;
+        }
+        
+        tr:hover {
+            background: #F8FAFC;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .delete-small {
+            background: #DC2626;
+            padding: 7px 10px;
+        }
+        
+        .edit-small {
+            background: #2563EB;
+            padding: 7px 10px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748B;
+        }
+        /* RESPONSIVE */
+        
+        @media(max-width: 800px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            header h2 {
+                font-size: 16px;
+            }
+        }
+        
+        @media(max-width: 500px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .records-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .search-box {
+                flex-wrap: wrap;
+            }
+            .search-box input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header>
+        <h2>EMPLOYEE MANAGEMENT SYSTEM</h2>
+        <span class="admin">ADMIN PANEL</span>
+    </header>
+
+    <div class="container">
+
+        <h1>Admin Dashboard</h1>
+
+        <!-- STATISTICS -->
+
+        <div class="cards">
+
+            <div class="card">
+                <p>TOTAL EMPLOYEES</p>
+                <h2 class="blue" id="totalEmployees">0</h2>
+            </div>
+
+            <div class="card">
+                <p>DEPARTMENTS</p>
+                <h2 class="green" id="totalDepartments">0</h2>
+            </div>
+
+            <div class="card">
+                <p>MONTHLY PAYROLL</p>
+                <h2 class="red" id="totalPayroll">KSH 0.00</h2>
+            </div>
+
+        </div>
+
+        <!-- REGISTER EMPLOYEE -->
+
+        <div class="form-section">
+
+            <h3>Register New Employee</h3>
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>Employee Name</label>
+                    <input type="text" id="name" placeholder="Enter employee name">
+                </div>
+
+                <div class="form-group">
+                    <label>Department</label>
+                    <input type="text" id="department" placeholder="Enter department">
+                </div>
+
+                <div class="form-group">
+                    <label>Monthly Salary (KSH)</label>
+                    <input type="number" id="salary" placeholder="Enter salary" min="0" step="0.01">
+                </div>
+
+            </div>
+
+            <button class="add-btn" onclick="addEmployee()">
+        + Add Employee
+    </button>
+
+        </div>
+
+        <!-- EMPLOYEE RECORDS -->
+
+        <div class="records">
+
+            <div class="records-header">
+
+                <h3>Employee Records</h3>
+
+                <div class="search-box">
+
+                    <input type="text" id="search" placeholder="Search employees..." oninput="displayEmployees()">
+
+                    <button class="refresh-btn" onclick="refreshRecords()">
+                Refresh
+            </button>
+
+                </div>
+
+            </div>
+
+            <!-- TABLE -->
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Employee Name</th>
+                            <th>Department</th>
+                            <th>Salary (KSH)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="employeeTable"></tbody>
+
+                </table>
+
+            </div>
+
+            <br>
+
+            <button class="delete-btn" onclick="deleteSelected()">
+        Remove Selected Employee
+    </button>
+
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Employee Management System | Admin Dashboard
+    </div>
+
+    <script>
+        // ============ DATABASE STORAGE ============
+
+        let employees = JSON.parse(
+            localStorage.getItem("employees")
+        ) || [];
+
+        let selectedId = null;
+
+        // ============ SAVE DATA ============
+
+        function saveData() {
+            localStorage.setItem(
+                "employees",
+                JSON.stringify(employees)
+            );
+        }
+
+        // ============ UPDATE DASHBOARD ============
+
+        function updateDashboard() {
+
+            document.getElementById("totalEmployees").textContent =
+                employees.length;
+
+            let departments = new Set(
+                employees.map(emp => emp.department.toLowerCase())
+            );
+
+            document.getElementById("totalDepartments").textContent =
+                departments.size;
+
+            let payroll = employees.reduce(
+                (sum, emp) => sum + emp.salary,
+                0
+            );
+
+            document.getElementById("totalPayroll").textContent =
+                "KSH " + payroll.toLocaleString(
+                    "en-KE", {
+                        minimumFractionDigits: 2
+                    }
+                );
+        }
+
+        // ============ DISPLAY EMPLOYEES ============
+
+        function displayEmployees() {
+
+            const table = document.getElementById("employeeTable");
+
+            table.innerHTML = "";
+
+            const keyword = document.getElementById("search")
+                .value.toLowerCase();
+
+            const filtered = employees.filter(emp =>
+                emp.name.toLowerCase().includes(keyword) ||
+                emp.department.toLowerCase().includes(keyword)
+            );
+
+            filtered.forEach(emp => {
+
+                const row = document.createElement("tr");
+
+                const values = [
+                    emp.id,
+                    emp.name,
+                    emp.department,
+                    "KSH " + emp.salary.toLocaleString("en-KE", {
+                        minimumFractionDigits: 2
+                    })
+                ];
+
+                values.forEach(value => {
+                    const cell = document.createElement("td");
+                    cell.textContent = value;
+                    row.appendChild(cell);
+                });
+
+                const actionCell = document.createElement("td");
+                const actions = document.createElement("div");
+                actions.className = "actions";
+
+                const editButton = document.createElement("button");
+                editButton.className = "edit-small";
+                editButton.textContent = "Edit";
+                editButton.onclick = () => editEmployee(emp.id);
+
+                const deleteButton = document.createElement("button");
+                deleteButton.className = "delete-small";
+                deleteButton.textContent = "Delete";
+                deleteButton.onclick = () => deleteEmployee(emp.id);
+
+                actions.append(editButton, deleteButton);
+                actionCell.appendChild(actions);
+                row.appendChild(actionCell);
+
+                row.onclick = () => {
+                    selectedId = emp.id;
+                };
+
+                table.appendChild(row);
+
+            });
+
+            updateDashboard();
+        }
+
+        // ============ ADD EMPLOYEE ============
+
+        function addEmployee() {
+
+            const name = document.getElementById("name").value.trim();
+            const department = document.getElementById("department").value.trim();
+            const salary = document.getElementById("salary").value;
+
+            if (!name || !department || salary === "") {
+                alert("Please fill in all employee details.");
+                return;
+            }
+
+            if (!Number.isFinite(Number(salary)) || Number(salary) < 0) {
+                alert("Please enter a valid non-negative salary.");
+                return;
+            }
+
+            const employee = {
+                id: employees.length ?
+                    Math.max(...employees.map(emp => emp.id)) + 1 :
+                    1,
+                name: name,
+                department: department,
+                salary: Number(salary)
+            };
+
+            employees.push(employee);
+
+            saveData();
+
+            clearFields();
+
+            displayEmployees();
+
+            alert("Employee added successfully!");
+        }
+
+        // ============ CLEAR FIELDS ============
+
+        function clearFields() {
+
+            document.getElementById("name").value = "";
+            document.getElementById("department").value = "";
+            document.getElementById("salary").value = "";
+
+        }
+
+        // ============ EDIT EMPLOYEE ============
+
+        function editEmployee(id) {
+
+            const employee = employees.find(emp => emp.id === id);
+
+            if (!employee) return;
+
+            const name = prompt("Enter employee name:", employee.name);
+            if (name === null) return;
+
+            const department = prompt(
+                "Enter department:",
+                employee.department
+            );
+            if (department === null) return;
+
+            const salary = prompt(
+                "Enter monthly salary:",
+                employee.salary
+            );
+            if (salary === null) return;
+
+            const parsedSalary = Number(salary);
+
+            if (!name.trim() ||
+                !department.trim() ||
+                salary.trim() === "" ||
+                !Number.isFinite(parsedSalary) ||
+                parsedSalary < 0
+            ) {
+                alert("Please enter valid employee details.");
+                return;
+            }
+
+            employee.name = name.trim();
+            employee.department = department.trim();
+            employee.salary = parsedSalary;
+
+            saveData();
+            displayEmployees();
+
+            alert("Employee updated successfully!");
+        }
+
+        // ============ DELETE EMPLOYEE ============
+
+        function deleteEmployee(id) {
+
+            if (confirm("Are you sure you want to delete this employee?")) {
+
+                employees = employees.filter(
+                    emp => emp.id !== id
+                );
+
+                if (selectedId === id) selectedId = null;
+
+                saveData();
+                displayEmployees();
+
+                alert("Employee deleted successfully!");
+            }
+        }
+
+        // ============ DELETE SELECTED ============
+
+        function deleteSelected() {
+
+            if (selectedId === null) {
+                alert("Please select an employee row first.");
+                return;
+            }
+
+            deleteEmployee(selectedId);
+        }
+
+        // ============ REFRESH ============
+
+        function refreshRecords() {
+
+            document.getElementById("search").value = "";
+
+            selectedId = null;
+
+            displayEmployees();
+        }
+
+        // ============ START APPLICATION ============
+
+        displayEmployees();
+    </script>
+
+</body>
+
+</html>
